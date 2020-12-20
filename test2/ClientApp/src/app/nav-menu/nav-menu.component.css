@@ -16,3 +16,25 @@ html {
 .box-shadow {
   box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
 }
+
+.menu-bar-container{
+}
+.header-style{
+    background-color: #555;
+}
+
+a {
+  color: white !important;
+}
+
+.nav-border-bottom{
+    border-bottom: 0.5px solid #777;
+}
+
+.navbar-brand {
+  margin-left: 10px;
+}
+
+.navbar-brand-main {
+  margin-left: 50px;
+}

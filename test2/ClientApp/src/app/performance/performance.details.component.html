@@ -4,24 +4,27 @@
   </div>
   <div class="info-block">
     <div class="info-block" [hidden]="!hasAccess">
-      <button (click)="edit(model?.id)" class="btn btn-warning">Редактировать</button>
+      <button (click)="edit(model?.id)" class="btn btn-warning">Редагувати</button>
     </div>
     <div class="title">
-      <span class="title-info">Название: </span>
-      <span>{{model?.name}}</span>
+      <span class="title-info">Назва: </span>
+      <span><b>{{model?.name}}</b></span>
     </div>
     <div class="description">
-      <span class="title-info">Описание: </span>
+      <span class="title-info">Опис: </span>
       <span>{{model?.description}}</span>
     </div>
     <br/>
     <div class="times" *ngFor="let item of times">
       Дата: <span class="time">{{item.time}}</span>
-      <button class="btn btn-primary" (click)="book(model.id, item.id)">Забронировать</button>
+      &nbsp;
+      Ціна: <span class="price">{{item.price}} грн;</span>
+      &nbsp; Кількість: <input type="number" class="form-control count-control" (change)="item.count=$event.target.value" [value]="item.count" />
+      <button class="btn btn-color" (click)="book(item.id, +item.count)">Забронювати</button>
     </div>
-    <div class="info-block">
-      <input type="number" class="form-control" [(ngModel)]="count" />
-    </div>
+    <!--<div class="info-block">
+      <input type="number" min- class="form-control" [(ngModel)]="count" />
+    </div>-->
   </div>
 </div>
 

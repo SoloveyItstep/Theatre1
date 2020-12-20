@@ -4,6 +4,7 @@ import { Performance } from './../models/performance';
 import { PerformanceService } from './../services/performanceService';
 import { AuthorizeService } from './../../api-authorization/authorize.service';
 import { RoleService } from './../services/roleService';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'performance-detail',
@@ -18,8 +19,7 @@ export class PerformanceDetail implements OnInit {
               private router: Router) { }
   model: Performance;
   id: string;
-  times: { time:string, id:string }[] = [];
-  count: number = 0;
+  times: { time: string, id: string, count: number, price: number }[] = [];
   hasAccess: boolean = false;
 
   ngOnInit() {
@@ -41,7 +41,8 @@ export class PerformanceDetail implements OnInit {
         var day = (date.getDate() < 10 ? '0' : '') + date.getDate();
         var hours = (time.getHours() < 10 ? '0' : '') + time.getHours();
         var minutes = (time.getMinutes() < 10 ? '0' : '') + time.getMinutes();
-        var tm = { time: '', id: '' };
+        var tm = { time: '', id: '', count: 0, price: 0 };
+        tm.price = this.model.performanceDates[i].performanceTimes[j].price;
         tm.time = '' + date.getFullYear() + '.' + month + '.' + day + ' ' + hours + ':' + minutes;
         tm.id = this.model.performanceDates[i].performanceTimes[j].id;
         this.times.push(tm);
@@ -49,15 +50,32 @@ export class PerformanceDetail implements OnInit {
     };
   }
 
-  book(id, timeId) {
-    if (this.authService.isAuthenticated()) {
-      this.service.bookPerformance(id, timeId, this.count)
+  book(timeId, count) {
+    if (count <= 0) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Помилка',
+        text: 'Кількість білетів повинна бути більше нуля'
+      });
+      return;
+    }
+    //if (this.authService.isAuthenticated()) {
+      this.service.bookPerformance(timeId, count)
         .subscribe((result) => {
           console.log(result)
+          Swal.fire({
+            icon: 'success',
+            title: 'Успішо заброньовано',
+            text: 'Успішно заброньовано білети у кількості - ' + count
+          });
         },
-          error => console.log(error)
-        ); // тут делается в случае положительного результата делается переадрессация на страницу заказа
-    }
+          error => {
+            if (error && error.status == 401) {
+              this.router.navigate(['/authentication/login'], { queryParams: { returnUrl: this.router.url } });
+            }
+            console.log(error);
+          }
+        );
   }
 
   edit(id) {

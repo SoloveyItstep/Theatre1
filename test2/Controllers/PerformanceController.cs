@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Security.Principal;
 using System.Threading.Tasks;
+using System.Web.Providers.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -28,9 +30,11 @@ namespace test2.Controllers
         [Route("{page:int}/{count:int}/performances/{date?}/{nameSearch?}")]
         public async Task<PerformanceModel> GetPerformances(Int32 page, Int32 count, DateTime? date, String nameSearch)
         {
-            PerformanceModel model = new PerformanceModel();
-            model.Performances = await helper.GetPerformances(page, count, date, nameSearch);
-            model.Total = await helper.GetTotal(date, nameSearch);
+            PerformanceModel model = new PerformanceModel
+            {
+                Performances = await helper.GetPerformances(page, count, date, nameSearch).ConfigureAwait(false),
+                Total = await helper.GetTotal(date, nameSearch).ConfigureAwait(false)
+            };
             return model;
         }
 
@@ -38,23 +42,23 @@ namespace test2.Controllers
         [Route("all")]
         public async Task<List<Performance>> GetAll()
         {
-            return await helper.GetAll();
+            return await helper.GetAll().ConfigureAwait(false);
         }
 
         [HttpPost]
         [Route("getItem/{id}")]
         public async Task<Performance> GetItem(String id)
         {
-            return await helper.GetPerformance(Guid.Parse(id));
+            return await helper.GetPerformance(Guid.Parse(id)).ConfigureAwait(false);
         }
 
         [HttpPost]
-        [Route("book/{id}/{timeId}/{count}")]
+        [Route("book/{timeId}/{count}")]
         [Authorize]
-        public async Task BookPerformance(String id, String timeId, Int32 count)
+        public async Task BookPerformance(String timeId, Int32 count)
         {
-            var userId = userManager.GetUserId(User);
-            await helper.Book(id, timeId, count, userId);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            await helper.Book(timeId, count, userId).ConfigureAwait(false);
         }
 
         [HttpPost]
@@ -62,7 +66,7 @@ namespace test2.Controllers
         [Authorize(Policy = "IsAdmin")]
         public async Task<Boolean> Edit([FromBody]Performance performance)
         {
-            return await helper.Edit(performance);
+            return await helper.Edit(performance).ConfigureAwait(false);
         }
     }
 }

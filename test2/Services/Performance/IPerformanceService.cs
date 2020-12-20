@@ -17,7 +17,8 @@ namespace test2.Services
         Task<Int32> GetTotal(DateTime date, String name);
         Task<Int32> GetTotal(String name);
         Task<Int32> GetTotal(DateTime date);
-        Task Book(Guid performanceId, Guid timeId, Int32 count, Guid userId);
+        Task<int> Book(Guid timeId, Int32 count, Guid userId);
         Task<Int32> Edit(Performance performance);
+        Task<List<OrdersResult>> GetUserBookedPerformances(string id);
     }
 }

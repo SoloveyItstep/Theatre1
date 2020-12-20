@@ -12,7 +12,8 @@ namespace test2.Helpers
         Task<List<Performance>> GetAll();
         Task<Int32> GetTotal(DateTime? date, String name);
         Task<Performance> GetPerformance(Guid id);
-        Task Book(string performanceId, string timeId, int count, string userId);
+        Task Book(string timeId, int count, string userId);
         Task<Boolean> Edit(Performance performance);
+        Task<List<OrdersResult>> GetUserBookedPerformances(string id);
     }
 }

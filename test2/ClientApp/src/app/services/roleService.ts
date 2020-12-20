@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Output, EventEmitter } from '@angular/core';
 import * as decode from 'jwt-decode';
 
 @Injectable()
@@ -19,6 +19,18 @@ export class RoleService {
 
     return true;
   }
+
+  hasAccess() {
+    this.key += window.location.origin + ':test2';
+    var data = JSON.parse(sessionStorage.getItem(this.key));
+    if (!data)
+      return false;
+    else if (!data.access_token)
+      return false;
+    return true;
+  }
+
+  authEvent = new EventEmitter<boolean>();
 
   //isAuthorized() {
   //  this.key += window.location.origin + ':test2';

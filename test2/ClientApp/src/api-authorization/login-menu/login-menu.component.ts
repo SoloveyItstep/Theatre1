@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { AuthorizeService } from '../authorize.service';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
@@ -13,6 +13,8 @@ export class LoginMenuComponent implements OnInit {
   public userName: Observable<string>;
 
   constructor(private authorizeService: AuthorizeService) { }
+
+  
 
   ngOnInit() {
     this.isAuthenticated = this.authorizeService.isAuthenticated();

@@ -2,6 +2,7 @@ import { Performance } from './../models/performance';
 import { PerformanceModel } from './../models/PerformanceModel';
 import { Component, OnInit } from '@angular/core';
 import { PerformanceService } from './../services/performanceService';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'performances-list',
@@ -49,9 +50,8 @@ export class PerformancesList implements OnInit {
   }
 
   filterByName($event: string) {
-    //debugger;
     this.page = 1;
-    this.viewList = this.viewList.filter(item =>
+    this.viewList = this.performances.filter(item =>
       item.name.toLowerCase().indexOf($event.toLowerCase()) != -1
     )
 

@@ -3,21 +3,32 @@ import { NgbDateStruct, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'filter-performance',
-  template: `<div style="display: flex;">
-  <input mdbInput type="text" name="text" style="width: 400px;" (input)="textChange($event.target.value)" [(ngModel)]="text" id="form1" class="form-control"> &nbsp;&nbsp;&nbsp;&nbsp;
+  template: `<div class='filter-container'>
+  <input mdbInput type="text" name="text" style="width: 400px;" placeholder='пошук за назвою' (input)="textChange($event.target.value)" [(ngModel)]="text" id="form1" class="form-control"> &nbsp;&nbsp;&nbsp;&nbsp;
 
 <div class="form-group">
     <div class="input-group">
     <input class="form-control" placeholder="yyyy-mm-dd"
              name="dp" [(ngModel)]="model" (ngModelChange)="dateChange()" ngbDatepicker #d="ngbDatepicker" style="width: 150px;">
     <div class="input-group-append">
-        <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"></button>
+        <button class="btn btn-outline-secondary calendar btn-color" (click)="d.toggle()" type="button"></button>
       </div>
   </div>
 </div>
 &nbsp;&nbsp;&nbsp;&nbsp;
-<button type="button" (click)="resetFilters()" style="height: 37px;" class="btn btn-info">сбросить фильтр</button>
-</div>`
+<button type="button" (click)="resetFilters()" style="height: 37px;" class="btn btn-color">Скинути фильтр</button>
+</div>`,
+  styles: [`
+  .btn-color{
+      background-color: red;
+      color: white;
+  }
+
+  .filter-container{
+      display: flex;
+      justify-content: flex-end;
+      width: 1096px;
+  }`]
 })
 export class PerformanceFilter {
   @Output()

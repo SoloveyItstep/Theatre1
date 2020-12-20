@@ -18,15 +18,24 @@ namespace test2.Services
             this.context = context;
         }
 
-        public Task Book(Guid performanceId, Guid timeId, int count, Guid userId)
+        public async Task<int> Book(Guid timeId, int count, Guid userId)
         {
-            context.Orders.Add(new Orders
+            var order = await context.Orders.FirstOrDefaultAsync(x => x.PerformanceTimeId == timeId && x.UserId == userId).ConfigureAwait(false);
+            if (order != null)
             {
-                Count = count,
-                PerformanceTimeId = timeId,
-                UserId = userId
-            });
-            return context.SaveChangesAsync();
+                order.Count += count;
+                context.Orders.Update(order);
+            }
+            else
+            {
+                context.Orders.Add(new Orders
+                {
+                    Count = count,
+                    PerformanceTimeId = timeId,
+                    UserId = userId
+                });
+            }
+            return await context.SaveChangesAsync().ConfigureAwait(false);
         }
 
         public async Task<Int32> Edit(Performance performance)
@@ -40,9 +49,9 @@ namespace test2.Services
             return context.Performances.AsNoTracking().Include(x => x.PerformanceDates).ToListAsync();
         }
 
-        public async Task<Performance> GetPerformance(Guid id)
+        public Task<Performance> GetPerformance(Guid id)
         {
-            return await context.Performances
+            return context.Performances
                 .Include(x => x.PerformanceDates)
                 .ThenInclude(x => x.PerformanceTimes)
                 .FirstOrDefaultAsync(x => x.Id == id);
@@ -102,6 +111,41 @@ namespace test2.Services
                                 dt.Date.Month == date.Month &&
                                 dt.Date.Day == date.Day)
                         != null);
+        }
+
+        public async Task<List<OrdersResult>> GetUserBookedPerformances(string id)
+        {
+            List<OrdersResult> result = new List<OrdersResult>();
+            var performances = await context.Performances.ToListAsync().ConfigureAwait(false);
+            var dates = await context.PerformanceDates.ToListAsync().ConfigureAwait(false);
+            var times = await context.PerformanceTimes.ToListAsync().ConfigureAwait(false);
+            var orders = await context.Orders.Where(x => x.UserId == Guid.Parse(id)).ToListAsync().ConfigureAwait(false);
+
+            performances.AsParallel().ForAll(x => {
+                var timesTmp = times.Where(t => orders.Any(o => o.PerformanceTimeId == t.Id)).ToList();
+                var datesTmp = dates.Where(d => timesTmp.Any(t => t.PerformanceDateId == d.Id)).ToList();
+                x.PerformanceDates = datesTmp.Where(d => d.PerformanceId == x.Id).ToList();
+                if (x.PerformanceDates.Count() > 0)
+                {
+                    foreach (var date in x.PerformanceDates)
+                    {
+                        foreach (var time in date.PerformanceTimes)
+                        {
+                            result.Add(new OrdersResult
+                            {
+                                Id = x.Id,
+                                Title = x.Name,
+                                Time = new DateTime(date.Date.Year, date.Date.Month, date.Date.Day, time.Time.Hour, time.Time.Minute, time.Time.Second),
+                                Price = time.Price,
+                                Count = orders.First(o => o.PerformanceTimeId == time.Id).Count
+                            });
+                        }
+                    }   
+                }
+            });
+
+
+            return result;
         }
 
         private Task<List<Performance>> Find(Int32 page, Int32 count, Expression<Func<Performance, Boolean>> predicate)

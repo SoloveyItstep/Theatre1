@@ -1,10 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Performance } from './../models/performance'
-import { PerformanceDate } from './../models/performanceDate';
-import { PerformanceTime } from './../models/performanceTime';
-import { Observable, throwError } from 'rxjs';
-import { catchError, retry } from 'rxjs/operators';
 
 @Injectable()
 export class PerformanceService {
@@ -24,20 +20,24 @@ export class PerformanceService {
     return this.http.post<Performance>('/performance/getitem/' + id, null);
   }
 
-  bookPerformance(id, timeId, count) {
-    return this.http.post('/performance/book/' + id + '/' + timeId + '/' + count, null);
+  bookPerformance(timeId, count) {
+    return this.http.post('/performance/book/' + timeId + '/' + count, null);
   }
 
   edit(item: Performance) {
     return this.http.post('/performance/edit', item);
   }
 
-  private getHeaders() {
-    const headers = new HttpHeaders();
-    headers.append('Access-Control-Allow-Headers', 'Content-Type');
-    headers.append('Access-Control-Allow-Methods', 'GET, POST');
-    headers.append('Access-Control-Allow-Origin', '*');
-    return headers;
+  getOrders() {
+    return this.http.post('/user/getorders/', null);
   }
+
+  //private getHeaders() {
+  //  const headers = new HttpHeaders();
+  //  headers.append('Access-Control-Allow-Headers', 'Content-Type');
+  //  headers.append('Access-Control-Allow-Methods', 'GET, POST');
+  //  headers.append('Access-Control-Allow-Origin', '*');
+  //  return headers;
+  //}
 }
 

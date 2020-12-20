@@ -1,0 +1,15 @@
+.times{
+    background-color: white;
+    border: 0.5px solid lightgray;
+    width: 280px;
+    padding: 10px;
+    margin-bottom: 20px;
+    margin-left: 20px;
+}
+
+.items{
+    display: flex;
+    width: 900px;
+    justify-content: flex-start;
+    flex-flow: wrap;
+}

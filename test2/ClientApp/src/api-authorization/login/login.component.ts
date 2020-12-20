@@ -3,6 +3,7 @@ import { AuthorizeService, AuthenticationResultStatus } from '../authorize.servi
 import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { LoginActions, QueryParameterNames, ApplicationPaths, ReturnUrlType } from '../api-authorization.constants';
+import { RoleService } from './../../app/services/roleService';
 
 // The main responsibility of this component is to handle the user's login process.
 // This is the starting point for the login process. Any component that needs to authenticate
@@ -19,7 +20,8 @@ export class LoginComponent implements OnInit {
   constructor(
     private authorizeService: AuthorizeService,
     private activatedRoute: ActivatedRoute,
-    private router: Router) { }
+    private router: Router,
+    private roleService: RoleService) { }
 
   async ngOnInit() {
     const action = this.activatedRoute.snapshot.url[1];
@@ -44,6 +46,7 @@ export class LoginComponent implements OnInit {
         throw new Error(`Invalid action '${action}'`);
     }
   }
+
 
 
   private async login(returnUrl: string): Promise<void> {
@@ -74,6 +77,8 @@ export class LoginComponent implements OnInit {
         // There should not be any redirects as completeSignIn never redirects.
         throw new Error('Should not redirect.');
       case AuthenticationResultStatus.Success:
+        let auth = result.state ? true : false;
+        this.roleService.authEvent.emit(true);
         await this.navigateToReturnUrl(this.getReturnUrl(result.state));
         break;
       case AuthenticationResultStatus.Fail:

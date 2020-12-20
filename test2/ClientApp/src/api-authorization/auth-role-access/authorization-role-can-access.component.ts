@@ -3,7 +3,7 @@ import { map, tap, filter } from 'rxjs/operators';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router, UrlTree } from '@angular/router'
 import { AuthorizeService, } from './../authorize.service';
 import { ApplicationPaths, QueryParameterNames } from './../api-authorization.constants';
-import { Inject } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import * as decode from 'jwt-decode';
 import { name } from './../../../package.json';
 
@@ -11,9 +11,7 @@ export interface IUser {
   name?: string;
 }
 
-@Inject({
-  providedIn: 'root'
-})
+@Injectable()
 export class AuthorizeRoleGuard implements CanActivate {
   private userSubject: BehaviorSubject<IUser | null> = new BehaviorSubject(null);
   private key = 'oidc.user:';

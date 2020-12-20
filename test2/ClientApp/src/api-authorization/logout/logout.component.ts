@@ -37,6 +37,7 @@ export class LogoutComponent implements OnInit {
         await this.processLogoutCallback();
         break;
       case LogoutActions.LoggedOut:
+        this.router.navigate(['/'])
         this.message.next('You successfully logged out!');
         break;
       default:

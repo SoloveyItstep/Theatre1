@@ -105,7 +105,7 @@ namespace test2
                 if (env.IsDevelopment())
                     spa.UseAngularCliServer(npmScript: "start");
             });
-            //await InitRoles(app.ApplicationServices); //разкомментировать для добавления роли админа
+            //InitRoles(app.ApplicationServices).Wait(); //разкомментировать для добавления роли админа
         }
 
         // Добавление роли админа пользователю
@@ -119,11 +119,11 @@ namespace test2
                 roleManager = (RoleManager<IdentityRole>)scope.ServiceProvider.GetService(typeof(RoleManager<IdentityRole>));
                 IdentityResult roleResult;
 
-                var adminRoleCheck = await roleManager.RoleExistsAsync("Admin");
+                var adminRoleCheck = await roleManager.RoleExistsAsync("Admin").ConfigureAwait(false);
 
                 if (!adminRoleCheck)
                 {
-                    roleResult = await roleManager.CreateAsync(new IdentityRole("Admin"));
+                    roleResult = await roleManager.CreateAsync(new IdentityRole("Admin")).ConfigureAwait(false);
                 }
 
                 ApplicationUser user = await userManager.FindByEmailAsync("admin@gmail.com"); // подставляем логин (email) пользователя

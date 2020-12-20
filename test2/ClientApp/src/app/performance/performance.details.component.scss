@@ -1,9 +1,11 @@
 .details-container{
     display: flex;
     flex-basis: 0 0 80%;
+    color: white;
 }
 .title-info{
     font-weight: bolder;
+    color: white;
 }
 
 #image{
@@ -12,9 +14,26 @@
 }
 
 .times {
+  display: flex;
+  justify-content: space-between;
+  width: 620px;
   margin-bottom: 15px;
   margin-top: 15px;
+  color: white;
   & button{
       margin-left: 10px;
   }
+}
+
+.text-color{
+    color: white;
+}
+
+.count-control{
+    width: 100px;
+}
+
+.btn-color{
+    background-color: red;
+    color: white;
 }

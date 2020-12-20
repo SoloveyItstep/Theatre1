@@ -1,9 +1,13 @@
-<header>
+<header class="header-style">
   <nav
-    class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3"
+    class="navbar navbar-expand-sm navbar-toggleable-sm box-shadow mb-3 nav-border-bottom"
   >
-    <div class="container">
-      <a class="navbar-brand" [routerLink]="['/']">test2</a>
+    <div class="container menu-bar-container">
+      <a class="navbar-brand navbar-brand-main" [routerLink]="['/']">Вистави</a>
+      <a class="navbar-brand" [routerLink]="['/how-to-book']">Як замовити</a>
+      <a class="navbar-brand" [routerLink]="['/contacts']">Контакти</a>
+      <a class="navbar-brand" [routerLink]="['/about-us']">О нас</a>
+      <a class="navbar-brand" [routerLink]="['/my-orders']" [hidden]="!isAuthenticated">Мої бронювання</a>
       <button
         class="navbar-toggler"
         type="button"
@@ -15,29 +19,17 @@
       >
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div
-        class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse"
-        [ngClass]="{ show: isExpanded }"
-      >
+      <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse" [ngClass]="{ show: isExpanded }">
         <app-login-menu></app-login-menu>
         <ul class="navbar-nav flex-grow">
-          <li
-            class="nav-item"
+          <li class="nav-item"
             [routerLinkActive]="['link-active']"
-            [routerLinkActiveOptions]="{ exact: true }"
-          >
-            <a class="nav-link text-dark" [routerLink]="['/']">Home</a>
+            [routerLinkActiveOptions]="{ exact: true }">
+            <!--<a class="nav-link text-dark" [routerLink]="['/']">Додому</a>-->
           </li>
-          <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link text-dark" [routerLink]="['/counter']"
-              >Counter</a
-            >
-          </li>
-          <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link text-dark" [routerLink]="['/fetch-data']"
-              >Fetch data</a
-            >
-          </li>
+          <!--<li class="nav-item" [routerLinkActive]="['link-active']">
+            <a class="nav-link text-dark" [routerLink]="['/fetch-data']">Fetch data</a>
+          </li>-->
         </ul>
       </div>
     </div>

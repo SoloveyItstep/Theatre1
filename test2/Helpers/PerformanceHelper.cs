@@ -49,15 +49,20 @@ namespace test2.Helpers
             return service.GetTotal();
         }
 
-        public Task Book(string performanceId, string timeId, int count, string userId)
+        public Task Book(string timeId, int count, string userId)
         {
-            return service.Book(Guid.Parse(performanceId), Guid.Parse(timeId), count, Guid.Parse(userId));
+            return service.Book(Guid.Parse(timeId), count, Guid.Parse(userId));
         }
 
         public async Task<bool> Edit(Performance performance)
         {
             Int32 result = await service.Edit(performance);
             return result == 1;
+        }
+
+        public Task<List<OrdersResult>> GetUserBookedPerformances(string id)
+        {
+            return service.GetUserBookedPerformances(id);
         }
     }
 }
