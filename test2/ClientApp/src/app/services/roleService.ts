@@ -3,12 +3,12 @@ import * as decode from 'jwt-decode';
 
 @Injectable()
 export class RoleService {
-  private key = 'oidc.user:';
+  private preKey = 'oidc.user:';
   private adminRoleName: string = 'Admin';
 
   hasAdminRole() {
-    this.key += window.location.origin + ':test2';
-    var data = JSON.parse(sessionStorage.getItem(this.key));
+    let key = this.preKey + window.location.origin + ':test2';
+    var data = JSON.parse(sessionStorage.getItem(key));
     if (!data)
       return false;
     else if (!data.access_token)
@@ -21,8 +21,8 @@ export class RoleService {
   }
 
   hasAccess() {
-    this.key += window.location.origin + ':test2';
-    var data = JSON.parse(sessionStorage.getItem(this.key));
+    let key = this.preKey + window.location.origin + ':test2';
+    var data = JSON.parse(sessionStorage.getItem(key));
     if (!data)
       return false;
     else if (!data.access_token)

@@ -26,6 +26,7 @@ var PerformanceDetail = /** @class */ (function () {
             _this.service.getItem(_this.id)
                 .subscribe(function (item) { return _this.initModel(item); });
         });
+        debugger;
         this.hasAccess = this.roleService.hasAdminRole();
     };
     PerformanceDetail.prototype.initModel = function (item) {

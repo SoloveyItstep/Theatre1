@@ -28,6 +28,7 @@ export class PerformanceDetail implements OnInit {
       this.service.getItem(this.id)
         .subscribe(item => this.initModel(item));
     });
+    debugger;
     this.hasAccess = this.roleService.hasAdminRole();
   }
 
